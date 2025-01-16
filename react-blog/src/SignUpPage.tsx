@@ -29,6 +29,7 @@ const SignupForm: React.FC = () => {
         email,
       })
       .then((res) => {
+        console.log("This is res",res)
         if(res.data.status){
           navigate('/authpage')
         }

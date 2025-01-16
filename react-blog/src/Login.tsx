@@ -13,13 +13,15 @@ const LoginForm: React.FC = () => {
 	const navigate = useNavigate();
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		const response = await axios.post(`${server}/auth/login`, {
+		await axios.post(`${server}/auth/login`, {
 			email, password
-		}).then((res) => {
+
+		},{ withCredentials: true }).then((res) => {
 			console.log("This is data", res.data);
 			if (res.data.status) {
 			  localStorage.setItem("userId",res.data.userId);
-			  navigate("/");
+			  localStorage.setItem("username",res.data.username)
+			  navigate("/homepage");
 			}
 		  })
 		  .catch((err) => {

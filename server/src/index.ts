@@ -5,18 +5,29 @@ import mongoose from "mongoose"
 import cors from "cors"
 import cookieParser from "cookie-parser";
 import { createServer } from "http";
+import path from "path";
 
+// Calculate the correct public path - going up one level from the compiled directory
+const publicPath = path.join(__dirname, '..', 'public');
 dotevn.config()
 
 const app = express()
 const server = createServer(app)
+
 app.use(express.json())
 app.use(cookieParser())
+app.use(express.urlencoded({ extended: true }));
+app.use('/public', express.static(publicPath));
 app.use(cors({
-    origin: ["http://localhost:5173"],
+    origin: process.env.CLIENT_URL as string,
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
 })
 )
+
+app.options("*", cors());
+
 
 app.use("/auth", userRoutes)
 
